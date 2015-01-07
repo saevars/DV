@@ -17,10 +17,19 @@
     padding:5px;	      
 }
 #section {
- 
-   	float:center; 
+    margin-left: auto;
+    margin-right: auto;
+    width: 55%;
     padding:10px;
-    text-align:center;	 	 
+    text-align:justify;	 	 
+}
+
+#image {
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    padding:10px;
+    text-align:center;      
 }
 #footer {
     background-color:black;
@@ -34,27 +43,66 @@
 
 <body>
 <div id="header">
-<h1>VolVis</h1>
+    <h1>VolVis</h1>
 </div>
 
 <div id="section">
-<h2>Body Stuff</h2>
-<p>
-Some lot of random cool text about stuff
-</p>
-<img src="cropped/transferABCD.png" alt="W3Schools.com" >
-<p>
-Some lot of random cool text about stuff
-</p>
-<img src="cropped/human1.png" alt="W3Schools.com" >
-<img src="cropped/human2.png" alt="W3Schools.com" >
-<img src="cropped/human3.png" alt="W3Schools.com" >
-<img src="cropped/human4.png" alt="W3Schools.com" >
-<img src="cropped/human5.png" alt="W3Schools.com" >
-<img src="cropped/human6.png" alt="W3Schools.com" >
+    <h2>Body Stuff</h2>
+    <p>
+    For this assignment we used two datasets from volvis.org.  One CT scan of a backpack 	and another one the abdomen and pelvis.  Both can be found and downloaded here.
+    After some browsing around various volume visualization tools we settled on exposure-render.  A tool developed by PhD researcher at TU Delft Thomas Kroes and available at code.google.com <a href="https://code.google.com/p/exposure-render/	">here</a>. 
+    <br>
+    Though we downloaded the RAW file for the abdomen and pelvis to visualize in ParaView we saw that it was already available as a demo in exposure-render with a preloaded transfer function (TS) that can be seen in Figure 1.  There are 3 peaks marked with A,B,C and D and in the following images we take a closer look at what they represent.
+    </p>
+
+
+    <div id="image">
+
+        <img src="cropped/transferABCD.png">
+        <figcaption>Figure1. - Histogram of the abdomen and pelvis</figcaption>
+    </div>
+
+    <p>
+        By only visualizing a small interval around peak A we get Figure 2.  It is a soft tissue and most probably body fat.
+    </p>
+
+    <div id="image">
+        <img src="cropped/human1.png">
+        <figcaption >Figure2. - A narrow interval around peak A on the histogram <br> function for the abdomen and pelvis</figcaption>
+    </div>
+    <p>
+        When moving the little highlighted interval over to peak B all the fat is gone and only muscles remains as can be seen in Figure 3.
+    </p>
+
+    <div id="image">
+        <img src="cropped/human2.png">
+        <figcaption>Figure3 - Peak B visualized showing only muscles.</figcaption>
+    </div>
+    <p>
+       Peak C on the histogram seems to be the artery, part of the heart and soft bone tissue.  When and interval next to point C is observed the artery can not be seen.  Point C is shown in Figure 4.
+    </p>
+    <div id="image">
+        <img src="cropped/human3.png">
+        <figcaption>Figure4 - Peak C of the histogram.  Soft bone tissue and the artery.</figcaption>
+    </div>
+    <p>
+        The last peak on the histogram is the densest material of the CT scan and when highlighted and visualized shows  the thigh bone or the femur and is shown in Figure 5.  
+    </p>
+    <div id="image">
+        <img src="cropped/human4.png">
+        <figcaption>Figure5 - Peak D is the toughest material in the data and shows the femur.</figcaption>
+    </div>
+    <p>
+       After experimenting with the transfer function, visualizing the four peaks and various parts histogram we made a one final image showing the bones and artery together and is shown in Figure 6.
+    </p>
+    <div id="image">
+        <img src="cropped/human5.png">
+        <figcaption>Figure6 - Highlighting peak C, D and small part from the data between the peaks for fun.</figcaption>
+    </div>
 </div>
+
 <div id="footer">
-Prumps Prump
+    Saevar Steinn Hilmarsson & Tudor Voicu
 </div>
 
 
