@@ -1,0 +1,14 @@
+ObjectType = Image
+NDims = 3
+BinaryData = True
+BinaryDataByteOrderMSB = False
+CompressedData = True
+CompressedDataSize = 57814698
+TransformMatrix = 1 0 0 0 1 0 0 0 1
+Offset = 0 0 0
+CenterOfRotation = 0 0 0
+ElementSpacing = 0.977 0.977 1.25
+DimSize = 512 512 373
+AnatomicalOrientation = ???
+ElementType = MET_SHORT
+ElementDataFile = backpack.raw
