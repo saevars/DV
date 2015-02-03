@@ -69,6 +69,35 @@ d3.json("world-50m.json", function(error, world) {
 
 d3.select(self.frameElement).style("height", height + "px");
 
+// Points on the map -----------------------------------------------------------------
+	// We read the data --------------------------------------------------------------
+d3.csv("gps.csv",function(error, data) {
+    data.forEach(function(d) {
+		d.Lat  = +d.Lat
+		d.Long = +d.Long
+		console.log(d.Long)
+	});
+
+d3.select(self.frameElement).style("height", height + "px");
+ svg.selectAll("circles.points")
+.data(data)
+.enter()
+.append("circle")
+.attr("r",6)
+.attr("transform", function(d) {console.log(d);return "translate(" + projection([d.Long,d.Lat]) + ")";})
+.style("fill", "red");
+
+svg.append("path")
+.data(data)
+.datum({type: "LineString", coordinates: 
+        [function(d){return[d.Long,d.Lat]}] // points in decimal degrees
+       })
+.attr("d", path)
+.style({'fill': '#B10000', 'fill-opacity': 0})
+.style({'stroke-width': 2, 'stroke': '#B10000', 'stroke-linejoin': 'round'});
+
+}); 
+/*
 d3.select(self.frameElement).style("height", height + "px");
  svg.selectAll("circles.points")
 .data([10,10])
@@ -86,5 +115,16 @@ d3.select(self.frameElement).style("height", height + "px");
 .attr("r",6)
 .attr("transform", function() {return "translate(" + projection([-18,65]) + ")";})
 .style("fill", "red");
+*/
+// Lines on the map ------------------------------------------------------------------
+/*
+svg.append("path")
+.datum({type: "LineString", coordinates: 
+        [[-75,43],[-18,65],[26,44]] // points in decimal degrees
+       })
+.attr("d", path)
+.style({'fill': '#B10000', 'fill-opacity': 0})
+.style({'stroke-width': 2, 'stroke': '#B10000', 'stroke-linejoin': 'round'});
+*/
 
 </script>
