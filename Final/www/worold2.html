@@ -50,6 +50,8 @@ var svg = d3.select("body").append("svg")
     .attr("width", width)
     .attr("height", height);
 
+var coords = [];
+
 svg.append("path")
     .datum(graticule)
     .attr("class", "graticule")
@@ -69,62 +71,44 @@ d3.json("world-50m.json", function(error, world) {
 
 d3.select(self.frameElement).style("height", height + "px");
 
-// Points on the map -----------------------------------------------------------------
-	// We read the data --------------------------------------------------------------
+// -------------------------------------------------------------------------------------
+// And now it is time for some for some magic ! ----------------------------------------
+// -------------------------------------------------------------------------------------
+
+// Read data from CSV file
 d3.csv("gps.csv",function(error, data) {
-    data.forEach(function(d) {
-		d.Lat  = +d.Lat
-		d.Long = +d.Long
-		console.log(d.Long)
+
+	//Collect Lat and Long into an arrays coords
+	data.forEach(function(d){
+		if (d.Lat > 0 ){
+			coords.push([+d.Long,+d.Lat]);
+		}
 	});
 
+ 
+//Map out all the gps points as red circles
 d3.select(self.frameElement).style("height", height + "px");
  svg.selectAll("circles.points")
 .data(data)
 .enter()
 .append("circle")
 .attr("r",6)
-.attr("transform", function(d) {console.log(d);return "translate(" + projection([d.Long,d.Lat]) + ")";})
+.attr("transform", function(d) {return "translate(" + projection([d.Long,d.Lat]) + ")";})
 .style("fill", "red");
 
+//Draw some lines between the points
+d3.select(self.frameElement).style("height", height + "px");
 svg.append("path")
-.data(data)
 .datum({type: "LineString", coordinates: 
-        [function(d){return[d.Long,d.Lat]}] // points in decimal degrees
+        coords // points in decimal degrees
        })
 .attr("d", path)
 .style({'fill': '#B10000', 'fill-opacity': 0})
-.style({'stroke-width': 2, 'stroke': '#B10000', 'stroke-linejoin': 'round'});
+.style({'stroke-width': 1, 'stroke': '#B10000', 'stroke-linejoin': 'round'});
 
-}); 
-/*
-d3.select(self.frameElement).style("height", height + "px");
- svg.selectAll("circles.points")
-.data([10,10])
-.enter()
-.append("circle")
-.attr("r",6)
-.attr("transform", function() {return "translate(" + projection([-75,43]) + ")";})
-.style("fill", "red");
+});
 
-d3.select(self.frameElement).style("height", height + "px");
- svg.selectAll("circles.points")
-.data([10,10])
-.enter()
-.append("circle")
-.attr("r",6)
-.attr("transform", function() {return "translate(" + projection([-18,65]) + ")";})
-.style("fill", "red");
-*/
-// Lines on the map ------------------------------------------------------------------
-/*
-svg.append("path")
-.datum({type: "LineString", coordinates: 
-        [[-75,43],[-18,65],[26,44]] // points in decimal degrees
-       })
-.attr("d", path)
-.style({'fill': '#B10000', 'fill-opacity': 0})
-.style({'stroke-width': 2, 'stroke': '#B10000', 'stroke-linejoin': 'round'});
-*/
+
+
 
 </script>
