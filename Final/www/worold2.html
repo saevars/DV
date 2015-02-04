@@ -33,6 +33,8 @@ index.html#
 <script src="http://d3js.org/topojson.v1.min.js"></script>
 <script>
 
+ var dataSet = [{Cor1: [18.66667,57.33333], Cor2: [100.03333,25.66667] ,Dist: 0.001382},{Cor1: [18.66667,57.33333], Cor2: [-121.9376,41.5696] ,Dist: 0.000706},{Cor1: [18.66667,57.33333], Cor2: [-81.56667,42.56667] ,Dist: 0.000748},{Cor1: [18.66667,57.33333], Cor2: [73.55,34.8] ,Dist: 0.000677},{Cor1: [18.66667,57.33333], Cor2: [132.0664,43.2272] ,Dist: 0.000925},{Cor1: [18.66667,57.33333], Cor2: [104.316666,35.46666] ,Dist: 0.001242},{Cor1: [100.03333,25.66667], Cor2: [-121.9376,41.5696] ,Dist: 0.001344},{Cor1: [100.03333,25.66667], Cor2: [-81.56667,42.56667] ,Dist: 0.001386},{Cor1: [100.03333,25.66667], Cor2: [73.55,34.8] ,Dist: 0.001315},{Cor1: [100.03333,25.66667], Cor2: [132.0664,43.2272] ,Dist: 0.001563},{Cor1: [100.03333,25.66667], Cor2: [104.316666,35.46666] ,Dist: 0.00188},{Cor1: [-121.9376,41.5696], Cor2: [-81.56667,42.56667] ,Dist: 0.000334},{Cor1: [-121.9376,41.5696], Cor2: [73.55,34.8] ,Dist: 0.000407},{Cor1: [-121.9376,41.5696], Cor2: [132.0664,43.2272] ,Dist: 0.000655},{Cor1: [-121.9376,41.5696], Cor2: [104.316666,35.46666] ,Dist: 0.000972},{Cor1: [-81.56667,42.56667], Cor2: [73.55,34.8] ,Dist: 0.000449},{Cor1: [-81.56667,42.56667], Cor2: [132.0664,43.2272] ,Dist: 0.000697},{Cor1: [-81.56667,42.56667], Cor2: [104.316666,35.46666] ,Dist: 0.001014},{Cor1: [73.55,34.8], Cor2: [132.0664,43.2272] ,Dist: 0.000334},{Cor1: [73.55,34.8], Cor2: [104.316666,35.46666] ,Dist: 0.000805},{Cor1: [132.0664,43.2272], Cor2: [104.316666,35.46666] ,Dist: 0.001053}];
+
 var width = 960,
     height = 480;
 
@@ -77,7 +79,8 @@ d3.select(self.frameElement).style("height", height + "px");
 // -------------------------------------------------------------------------------------
 
 // Read data from CSV file
-d3.csv("gps.csv",function(error, data) {
+d3.csv('dmShort.csv',function(error,data){ data.forEach(function(d){console.log(d);return d;})});
+d3.csv("gpsShort.csv",function(error, data) {
 
 	//Collect Lat and Long into an arrays coords
 	data.forEach(function(d){
@@ -97,23 +100,16 @@ d3.select(self.frameElement).style("height", height + "px");
 .attr("transform", function(d) {return "translate(" + projection([d.Long,d.Lat]) + ")";})
 .style("fill", "red");
 
-//Draw some lines between the points
-/*
-d3.select(self.frameElement).style("height", height + "px");
-svg.append("path")
-.datum({type: "LineString", coordinates: coords})
-.attr("d", path,console.log("d"))
-.style({'fill': '#B10000', 'fill-opacity': 0})
-.style({'stroke-width': 1, 'stroke': '#B10000', 'stroke-linejoin': 'round'});
-*/
- for(var i=0, len=data.length-1; i<len; i++){
+
+
+ for(var i=0, len=dataSet.length; i<len; i++){
     // (note: loop until length - 1 since we're getting the next
     //  item with i+1)
+        console.log(dataSet[i].Cor1, dataSet[i].Cor2)
         links.push({
             type: "LineString",
             coordinates: [
-                [ data[i].Long, data[i].Lat ],
-                [ data[i+1].Long, data[i+1].Lat ]
+                dataSet[i].Cor1, dataSet[i].Cor2
             ]
         });
     }
@@ -127,9 +123,9 @@ pathArcs.enter()
         'class': 'arc'
     }).style({ 
         fill: 'none',
-        'stroke-width': function(d,i){console.log(+d.coordinates[0][0] / 20);return +d.coordinates[1][0] / 20;},
+        'stroke-width': function(d,i){return +dataSet[i].Dist*2000;},
         //stroke : '#B10000'
-        stroke: function(d,i){return "rgb("+i * 28  +",0,0)";}
+        stroke: function(d,i){return "rgb(255,"+ (255 - Math.ceil(dataSet[i].Dist*100000)) + ','+(255 - Math.ceil(dataSet[i].Dist*100000))  +")";}
     });
 
 //update
