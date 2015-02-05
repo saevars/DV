@@ -92,21 +92,34 @@
 
         // Enter the great archs of the world ! --------------------------------------------------------
 
-        svg.selectAll(".arc")
-                .data(links)
-                .enter()
-                .append("path")
-                .attr({'class': 'arc'})
-                .style({
-                    fill: 'none',
-                    'stroke-width': function (d, i) {
-                        return lineWidthScale(dataSet[i].Dist);
-                    },
-                    'stroke': function (d, i) {
-                        return getColorJet(colorScale(dataSet[i].Dist));
-                    }
-                })
-                .attr({d: path});
+//        svg.selectAll(".arc")
+//                .data(links)
+//                .enter()
+//                .append("path")
+//                .attr({'class': 'arc'})
+//                .style({
+//                    fill: 'none',
+//                    'stroke-width': function (d, i) {
+//                        return lineWidthScale(dataSet[i].Dist);
+//                    },
+//                    'stroke': function (d, i) {
+//                        return getColorJet(colorScale(dataSet[i].Dist));
+//                    }
+//                })
+//                .attr({d: path});
+        var results = getResults(dataSet, gpsCoords);
+        var d3line = d3.svg.line()
+                .x(function(d){return d.x;})
+                .y(function(d){return d.y;})
+                .interpolate("linear");
+        //plot the data
+        for(var i = 0; i < results.length; i++){
+            svg.append("path").attr("d", d3line(results[i]))
+                    .style("stroke-width", 1)
+                    .style("stroke", "#ff2222")
+                    .style("fill", "none")
+                    .style('stroke-opacity',0.115);
+        }
     }
 
     //Clear shit of the map ! ----------------------------------------------------------------------

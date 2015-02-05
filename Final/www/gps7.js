@@ -2,7 +2,7 @@
 //Data from seven strawberrys
 
 var gpsCoords = [
-    {id: 0, x: 18.66667, y: 57.33333, name: "NoName"},
+    {id: 0, x: 18.66667, y: 57.33333, country: "NoName", specie:"dsadsa"},
     {id: 1, x: 100.03333, y: 25.66667, name: "NoName"},
     {id: 2, x: -121.9376, y: 41.5696, name: "NoName"},
     {id: 3, x: -81.56667, y: 42.56667, name: "NoName"},
@@ -12,7 +12,13 @@ var gpsCoords = [
 
 var dataSet = [
     {id: 0, Cor1: {id: 0, x: 18.66667, y: 57.33333, name: "NoName"}, Cor2: {id: 1, x: 100.03333, y: 25.66667, name: "NoName"} ,Dist: 0.001382},
-    {id: 1, Cor1: {id: 0, x: 18.66667, y: 57.33333, name: "NoName"}, Cor2: {id: 2, x: -121.9376, y: 41.5696, name: "NoName"} ,Dist: 0.000706},
+
+    {   id: 1,
+        Cor1: {id: 0, x: 18.66667, y: 57.33333, name: "NoName"},
+        Cor2: {id: 2, x: -121.9376, y: 41.5696, name: "NoName"},
+        Dist: 0.000706
+    },
+
     {id: 2, Cor1: {id: 0, x: 18.66667, y: 57.33333, name: "NoName"}, Cor2: {id: 3, x: -81.56667, y: 42.56667, name: "NoName"} ,Dist: 0.000748},
     {id: 3, Cor1: {id: 0, x: 18.66667, y: 57.33333, name: "NoName"}, Cor2: {id: 4, x: 73.55, y: 34.8, name: "NoName"} ,Dist: 0.000677},
     {id: 4, Cor1: {id: 0, x: 18.66667, y: 57.33333, name: "NoName"}, Cor2: {id: 5, x: 132.0664, y: 43.2272, name: "NoName"} ,Dist: 0.000925},
