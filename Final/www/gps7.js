@@ -77,6 +77,7 @@ var getRawNodes = function(nodes, projection) {
     var max_x = 0;
     var min_y = Number.MAX_VALUE;
     var max_y = 0;
+    var nnodes = {};
 
     for(var i = 0; i < nodes.length; i++) {
         var proj = projection([nodes[i].x, nodes[i].y]);
@@ -92,7 +93,7 @@ var getRawNodes = function(nodes, projection) {
         max_y = Math.max(max_y, y);
     }
 
-    var new_scale_x = d3.scale.linear().domain([min_x,max_x]).range([1000,50]);
+    var new_scale_x = d3.scale.linear().domain([min_x, max_x]).range([1000,50]);
     var new_scale_y = d3.scale.linear().domain([min_y, max_y]).range([560,50]);
 
     for(var i = 0; i < nnodes.length; i++){
@@ -102,10 +103,11 @@ var getRawNodes = function(nodes, projection) {
     return nnodes;
 }
 
-var getResults = function(edges, nnodes){
+var getResults = function(raw_edges, nnodes){
     var eedges = [];
-    for(var i = 0; i < edges.length; i++){
-        eedges.push({'source ':edges[i].Cor1.id, 'target ':edges[i].Cor2.id});
+    for(var i = 0; i < raw_edges.length; i++){
+        eedges.push({'source':raw_edges[i].Cor1.id,
+            'target':raw_edges[i].Cor2.id});
     }
 
     var fbundling = d3.ForceEdgeBundling().nodes(nnodes).edges(eedges);
