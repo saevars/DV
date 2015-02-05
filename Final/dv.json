@@ -1,0 +1,7 @@
+[
+  {"Coords":"Africa","strength": 100,"imports":["America","Asia","Europe","Australia"]},
+  {"Coords":"America","strength": 300,"imports":["Africa","Asia","Europe","Australia"]},
+  {"Coords":"Europe","strength": 500,"imports":["America","Asia","Africa","Australia"]},
+  {"Coords":"Australia","strength": 700,"imports":["America","Asia","Europe","Africa"]},
+  {"Coords":"Asia","strength": 400,"imports":["America","Africa","Europe","Australia"]}
+  ]

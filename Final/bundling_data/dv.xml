@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns
+  http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
+
+  <key id="x" for="node" attr.name="x" attr.type="double"/>
+  <key id="tooltip" for="node" attr.name="tooltip" attr.type="string"/>
+  <key id="y" for="node" attr.name="y" attr.type="double"/>
+
+  <graph edgedefault="undirected">
+    <!-- nodes -->
+    <node id="0">
+      <data key="x">-779.0250000000001</data>
+      <data key="tooltip">ILM(lngx=-77.9025,laty=34.270556)</data>
+      <data key="y">-342.70556</data>
+    </node>
+    <node id="1">
+      <data key="x">-1205.33333</data>
+      <data key="tooltip">YKM(lngx=-120.533333,laty=46.566667)</data>
+      <data key="y">-465.66667</data>
+    </node>
+    <node id="2">
+      <data key="x">-1068.69444</data>
+      <data key="tooltip">HDN(lngx=-106.869444,laty=40.519444)</data>
+      <data key="y">-405.19444</data>
+    </node>
+    <node id="3">
+      <data key="x">-816.0</data>
+      <data key="tooltip">CRW(lngx=-81.6,laty=38.366667)</data>
+      <data key="y">-383.66667</data>
+    </node>
+
+    <!-- edges -->
+    <edge id="0" source="0" target="1"></edge>
+    <edge id="1" source="0" target="2"></edge>
+    <edge id="2" source="0" target="3"></edge>
+    <edge id="3" source="1" target="2"></edge>
+    <edge id="4" source="1" target="3"></edge>
+    <edge id="5" source="2" target="3"></edge>
+  </graph>
+</graphml>
