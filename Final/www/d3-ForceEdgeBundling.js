@@ -8,11 +8,11 @@ Author: Corneliu S. (github.com/upphiminn)
 (function(){
 	
 	d3.ForceEdgeBundling = function(){
-		var data_nodes = {}, 		// {'nodeid':{'x':,'y':},..}
+		    data_nodes = {}, 		// {'nodeid':{'x':,'y':},..}
 			data_edges = [], 		// [{'source':'nodeid1', 'target':'nodeid2'},..]
 			compatibility_list_for_edge = [],
 			subdivision_points_for_edge = [],
-			K = 0.1, 				// global bundling constant controling edge stiffness
+			K = 0.5, 				// global bundling constant controling edge stiffness - initial 0.1
 			S_initial = 0.1, 		// init. distance to move points
 			P_initial = 1, 			// init. subdivision number
 			P_rate    = 2,			// subdivision rate increase
