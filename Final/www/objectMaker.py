@@ -29,27 +29,26 @@ def run():
 
 	f.write("];")
 
-
 def newObj():
-	maxNumner = 60
+	maxNumber = 60
 	counter = 0
 	ids 	 = {}
 	Lat 	 = []
 	matrixIdHor  = []
-	nodeID   	 = 1
+	nodeID   	 = 0
 
-	gps = open('gps'+str(maxNumner)+'.js','w')
-	gps.write("var gpsCoords"+str(maxNumner)+" = [")
+	gps = open('gps'+str(maxNumber)+'.js','w')
+	gps.write("var gpsCoords"+str(maxNumber)+" = [")
 	with open('Coords.csv','r') as csvFile:
 		lines = csv.reader(csvFile)
 		lines.__next__()
 		for row in lines:
 			ids[row[0]] = [row[2],row[1]]
-			if counter < maxNumner:
+			if counter < maxNumber:
 				gps.write('{id: ' +  str(row[0]) + ', x: ' + str(row[2]) + ', y: ' + str(row[1] + ', name: "NoName"}, \n'))
 			counter += 1
 	i = 0
-	gps.write("]; \n var dataSet"+str(maxNumner)+"= [")
+	gps.write("]; \n var dataSet"+str(maxNumber)+"= [")
 	with open('Indimatrix.csv','r') as csvFile:
 		lines = csv.reader(csvFile)
 		for row in lines: #271 rows
@@ -58,12 +57,12 @@ def newObj():
 				for k in range(len(row)):
 					matrixIdHor.append(row[k])
 					print(row[k])
-			elif  i < maxNumner:
+			elif  i < maxNumber:
 				for j in range(0,i-1):
 					#print("Id ver: ",row[matrixIdVert])
 					#print("Id hor: ",matrixIdHor[j])
 					#print(row[j])
-					if j < maxNumner:
+					if j < maxNumber:
 						gps.write("{id: " + str(nodeID) +", Cor1: {id: " + str(row[matrixIdVert]) + ", x: " + str(ids[str(row[matrixIdVert])][0]) + ", y: " + str(ids[str(row[matrixIdVert])][1]) + ", name: 'NoName'}, Cor2: {id: "  + str(matrixIdHor[j]) + ", x: "+str(ids[str(matrixIdHor[j])][0]) + ", y: " + str(ids[str(matrixIdHor[j])][1]) + ", name: 'NoName'}, Dist: " + str(float(row[j])*0.0001) + "},\n")
 						nodeID += 1
 			i += 1
