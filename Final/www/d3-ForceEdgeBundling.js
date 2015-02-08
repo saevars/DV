@@ -12,17 +12,16 @@ Author: Corneliu S. (github.com/upphiminn)
 			data_edges = [], 		// [{'source':'nodeid1', 'target':'nodeid2'},..]
 			compatibility_list_for_edge = [],
 			subdivision_points_for_edge = [],
-			K = 0.5, 				// global bundling constant controling edge stiffness - initial 0.1
+			K = 0.1, 				// global bundling constant controling edge stiffness - initial 0.1
 			S_initial = 0.1, 		// init. distance to move points
 			P_initial = 1, 			// init. subdivision number
-			P_rate    = 2,			// subdivision rate increase
+			P_rate    = 1,			// subdivision rate increase
 			C = 6, 					// number of cycles to perform
 			I_initial = 90, 		// init. number of iterations for cycle
 			I_rate = 0.6666667,     // rate at which iteration number decreases i.e. 2/3
 			compatibility_threshold = 0.6,
 			invers_quadratic_mode  = false,
 			eps = 1e-6;
-			 
 
 		/*** Geometry Helper Methods ***/
 		function vector_dot_product(p, q){
