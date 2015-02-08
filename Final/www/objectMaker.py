@@ -14,8 +14,8 @@ def run():
 		lines = csv.reader(csvFile)
 		lines.__next__()
 		for row in lines:
-			Lat.append(row[3]) #longs
-			Lon.append(row[4]) #lats
+			Lat.append(("%.2f" % row[3])) #longs
+			Lon.append(("%.2f" % row[4])) #lats
 
 	with open('dmShort.csv','r') as csvFile:
 		lines = csv.reader(csvFile)
@@ -37,7 +37,7 @@ def newObj():
 	matrixIdHor  = []
 	nodeID   	 = 0
 
-	gps = open('gps'+str(maxNumber)+'.js','w')
+	gps = open('gpsData.js','w')
 	gps.write("var gpsCoords"+str(maxNumber)+" = [")
 	with open('Coords.csv','r') as csvFile:
 		lines = csv.reader(csvFile)
@@ -48,7 +48,7 @@ def newObj():
 				gps.write('{id: ' +  str(row[0]) + ', x: ' + str(row[2]) + ', y: ' + str(row[1] + ', name: "NoName"}, \n'))
 			counter += 1
 	i = 0
-	gps.write("]; \n var dataSet"+str(maxNumber)+"= [")
+	gps.write("]; \n var dataSet= [")
 	with open('Indimatrix.csv','r') as csvFile:
 		lines = csv.reader(csvFile)
 		for row in lines: #271 rows
