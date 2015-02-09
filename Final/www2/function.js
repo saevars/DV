@@ -5,33 +5,26 @@ require(['clusterfck'],function() {
     var links = [];
     var coords3D = [];
 
-    for (var i = 0, len = dataSet.length; i < len; i++) {
-        // (note: loop until length - 1 since we're getting the next
-        //  item with i+1)
-        //console.log(dataSet[i].Cor1, dataSet[i].Cor2)
-        links.push({
-            type: "LineString",
-            coordinates: [
-                [dataSet[i].Cor1.x, dataSet[i].Cor1.y], [dataSet[i].Cor2.x, dataSet[i].Cor2.y]
-            ]
-        });
-    }
-
-    var colorScale = d3.scale.pow().domain([0, d3.max(dataSet, function (d) {
+    //for (var i = 0, len = dataSet.length; i < len; i++) {
+    //    // (note: loop until length - 1 since we're getting the next
+    //    //  item with i+1)
+    //    //console.log(dataSet[i].Cor1, dataSet[i].Cor2)
+    //    links.push({
+    //        type: "LineString",
+    //        coordinates: [
+    //            [dataSet[i].Cor1.x, dataSet[i].Cor1.y], [dataSet[i].Cor2.x, dataSet[i].Cor2.y]
+    //        ]
+    //    });
+    //}
+    var colorScale = d3.scale.category10().domain([d3.min(dataSet, function(d){
         return d.Dist;
-    })]).rangeRound([0, 255]);
+    }), d3.max(dataSet, function(d){
+        return d.Dist;
+    })]).range(["white", "red"]);
 
     var lineWidthScale = d3.scale.pow().domain([0, d3.max(dataSet, function (d) {
         return d.Dist;
     })]).rangeRound([2, 2]);
-
-    var getColorJet = function (number) {
-        //if(number<0){
-        //    return "rgb("+(255+number)+","+(255+number)+",255)";
-        //} else {
-        return "rgb(255," + (255 - number) + "," + (255 - number) + ")";
-        //}
-    }
 
     var getRawNodes = function (nodes, projection) {
         var min_x = Number.MAX_VALUE;
@@ -79,14 +72,14 @@ require(['clusterfck'],function() {
         return results;
     }
 
-    var distScale = d3.scale.pow().domain([d3.min(dataSet, function (d) {
+    var distScale = d3.scale.linear().domain([d3.min(dataSet, function (d) {
         return d.Dist;
     }), d3.max(dataSet, function (d) {
         return d.Dist;
-    })]).range([0, 0.1]);
+    })]).range([0.05, 0.1]);
 
     var groupData = function () {
-        for (var i = 0, len = gpsCoords.length; i < len; i++)
+        for (var i = 0; i < gpsCoords.length; i++)
             coords3D.push([gpsCoords[i].x, gpsCoords[i].y, 0]);
     }
 
@@ -109,7 +102,7 @@ require(['clusterfck'],function() {
         .attr("x", 0)
         .attr("y", 0)
 
-//    svg.append("rect").attr("width", width).attr("height", height);
+    svg.append("rect").attr("width", width).attr("height", height);
 
     svg.append("path")
         .datum(graticule)
@@ -155,51 +148,132 @@ require(['clusterfck'],function() {
             })
             .style("fill", "yellow");
 
-        // Enter the great archs of the world ! --------------------------------------------------------
-
-//        svg.selectAll(".arc")
-//                .data(links)
-//                .enter()
-//                .append("path")
-//                .attr({'class': 'arc'})
-//                .style({
-//                    fill: 'none',
-//                    'stroke-width': function (d, i) {
-//                        return lineWidthScale(dataSet[i].Dist);
-//                    },
-//                    'stroke': function (d, i) {
-//                        return getColorJet(colorScale(dataSet[i].Dist));
-//                    }
-//                })
-//                .attr({d: path});
-
+        var auxCoords = gpsCoords.slice();
         var clusteredDataset = [];
         for (var clusterIdx = 0; clusterIdx < clusters.length; clusterIdx++) {
             var currCluster = clusters[clusterIdx];
             var clusteredById = [];
-            for (var coordsIdx = 0; coordsIdx < gpsCoords.length; coordsIdx++) {
-                for (var idx = 0; idx < currCluster.length; idx++) {
-                    if(gpsCoords[coordsIdx].x==currCluster[idx][0] && gpsCoords[coordsIdx].y==currCluster[idx][1]) {
-                        clusteredById.push(gpsCoords[coordsIdx].id);
+            var coordsLen = auxCoords.length;
+            for (var idx = 0; idx < currCluster.length; idx++) {
+                for (var coordsIdx = 0; coordsIdx < coordsLen; coordsIdx++) {
+                    if(auxCoords[coordsIdx].x==currCluster[idx][0] && auxCoords[coordsIdx].y==currCluster[idx][1]) {
+                        clusteredById.push(auxCoords[coordsIdx].id);
+                        auxCoords.splice(coordsIdx, 1);
+                        coordsIdx--;
+                        coordsLen--;
                     }
                 }
             }
             clusteredDataset.push(clusteredById);
         }
 
-        var results = getResults(dataSet, getRawNodes(gpsCoords,projection));
-        var d3line = d3.svg.line()
-            .x(function(d){return d.x;})
-            .y(function(d){return d.y;})
-            .interpolate("linear");
-        //plot the data
-        for(var i = 0; i < results.length; i++){
-            svg.append("path").attr("d", d3line(results[i]))
-                .style("stroke-width", 1)
-                .style("stroke", function () {return getColorJet(colorScale(dataSet[i].Dist));})
-                .style("fill", "none")
-                .style('stroke-opacity',distScale(dataSet[i].Dist));
+        var counter = 0;
+        var clusteredEdges = [];
+        for (var clusterIdx = 0; clusterIdx< clusteredDataset.length; clusterIdx++){
+            var currCluster = clusteredDataset[clusterIdx];
+            var linksCluster = [];
+            var clusterLength = currCluster.length;
+            for(var sourceIdx = 0; sourceIdx < clusterLength; sourceIdx++){
+                for(var targetIdx = 0; targetIdx < clusterLength ; targetIdx++){
+                    if(targetIdx==sourceIdx){
+                        continue;
+                    }
+                    for(var dataIdx = 0; dataIdx < dataSet.length; dataIdx++){
+                        if(dataSet[dataIdx].Cor1.id==currCluster[sourceIdx] && dataSet[dataIdx].Cor2.id==currCluster[targetIdx]){
+                            linksCluster.push(dataSet[dataIdx]);
+                            //linksCluster.Cor1.id--;
+                            //linksCluster.Cor2.id--;
+                        }
+                        counter++;
+                    }
+                }
+            }
+            clusteredEdges.push(linksCluster);
         }
+
+        clusterDistanceMatrix = [];
+        var counter = 0;
+        for(var sourceIdx = 0; sourceIdx < clusteredDataset.length; sourceIdx++) {
+            var sourceCluster = clusteredDataset[sourceIdx];
+            for(var targetIdx = 0; targetIdx < clusteredDataset.length; targetIdx++) {
+                if(targetIdx==sourceIdx) {
+                    continue;
+                }
+                var targetCluster = clusteredDataset[targetIdx];
+                var connectionsStrength = 0;
+                var cnt = 0;
+                for(var sourceElemIdx = 0; sourceElemIdx < sourceCluster.length; sourceElemIdx++){
+                    var startIdx = 0;
+                    for(var targetElemIdx = 0; targetElemIdx < targetCluster.length; targetElemIdx++) {
+                        for (var idx = startIdx; idx < dataSet.length; idx++) {
+                            //counter++;
+                            if (dataSet[idx].Cor1.id == sourceCluster[sourceElemIdx] && dataSet[idx].Cor2.id == targetCluster[targetElemIdx]) {
+                                startIdx = idx;
+                                connectionsStrength += dataSet[idx].Dist;
+                                cnt++;
+                            }
+                        }
+                    }
+                }
+                var conNorm = 0;
+                if(cnt!=0){
+                    conNorm = connectionsStrength/cnt;
+                }
+                clusterDistanceMatrix.push([sourceIdx, targetIdx, conNorm]);
+            }
+        }
+
+        for(var idx = 0; idx < clusteredEdges.length; idx++) {
+
+            var results = getResults(clusteredEdges[idx], getRawNodes(gpsCoords, projection));
+            var d3line = d3.svg.line()
+                .x(function (d) {
+                    return d.x;
+                })
+                .y(function (d) {
+                    return d.y;
+                })
+                .interpolate("linear");
+            //plot the data
+            for (var i = 0; i < results.length; i++) {
+                svg.append("path").attr("d", d3line(results[i]))
+                    .style("stroke-width", 1)
+                    .style("stroke", function () {
+                        return colorScale(dataSet[i].Dist);
+                    })
+                    .style("fill", "none")
+                    .style('stroke-opacity', distScale(dataSet[i].Dist));
+            }
+        }
+
+        //Enter the great archs of the world ! --------------------------------------------------------
+
+        var links = [];
+
+        for(var idx = 0; idx < clusterDistanceMatrix.length; idx++){
+            //links.push(projection([centroids[clusterDistanceMatrix[idx][0]],centroids[clusterDistanceMatrix[idx][1]]]));
+                links.push({
+                    type: "LineString",
+                    coordinates: [
+                        projection([centroids[clusterDistanceMatrix[idx][0]][0], centroids[clusterDistanceMatrix[idx][0]][1]]),
+                        projection([centroids[clusterDistanceMatrix[idx][1]][0], centroids[clusterDistanceMatrix[idx][1]][1]])
+                    ]
+                });
+        }
+        svg.selectAll(".arc")
+                .data(links)
+                .enter()
+                .append("path")
+                .attr({'class': 'arc'})
+                .style({
+                    fill: 'none',
+                    'stroke-width': 2,
+                    'stroke': function (d, i) {
+                        return "red"
+                        //return colorScale(clusterDistanceMatrix[i][2]);
+                    }
+                })
+                .attr({d: path});
     }
 
     function ClearData() {
@@ -210,12 +284,14 @@ require(['clusterfck'],function() {
     groupData();
 
 // Calculate clusters.
-    var clusters = clusterfck.kmeans(coords3D, 17);
+    var clusters = clusterfck.kmeans(coords3D,21);
     NewData(clusters);
 
     for(var i = 0; i < centroids.length; i++){
         var centroidProjection = projection([centroids[i][0], centroids[i][1]]);
-        svg.append("circle").attr("r", 4).attr("fill", "cyan").attr("cx", centroidProjection[0]).attr("cy", centroidProjection[1]);
+        svg.append("circle").attr("r", 3).attr("fill", "cyan").attr("cx", centroidProjection[0]).attr("cy", centroidProjection[1]);
+        svg.append("circle").attr("r", 2).attr("fill", "green").attr("cx", centroidProjection[0]).attr("cy", centroidProjection[1]);
+        svg.append("circle").attr("r", 1).attr("fill", "blue").attr("cx", centroidProjection[0]).attr("cy", centroidProjection[1]);
     }
     console.log(clusterfck);
     console.log(clusters);
