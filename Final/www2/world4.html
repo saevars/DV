@@ -24,113 +24,11 @@
 <script src="http://d3js.org/topojson.v1.min.js"></script>
 <script type="text/javascript" src="d3-ForceEdgeBundling.js"></script>
 <script src="gpsData.js"></script>
-<script src="function.js"></script>
+<script data-main="function" src="require.js"></script>
+
+
 <script>
 
-    var width = 1600,
-            height = 900;
-
-    var projection = d3.geo.equirectangular()
-            .scale(240)
-            .translate([width / 2, height / 2])
-            .precision(.1);
-
-    var path = d3.geo.path()
-            .projection(projection);
-
-    var graticule = d3.geo.graticule();
-
-    var svg = d3.select("body").append("svg")
-            .attr("width", width)
-            .attr("height", height)
-            .attr("x", 0)
-            .attr("y", 0)
-
-//    svg.append("rect").attr("width", width).attr("height", height);
-
-    svg.append("path")
-            .datum(graticule)
-            .attr("class", "graticule")
-            .attr("d", path);
-
-    d3.json("world-50m.json", function (error, world) {
-        svg.insert("path", ".graticule")
-                .datum(topojson.feature(world, world.objects.land))
-                .attr("class", "land")
-                .attr("d", path);
-
-        svg.insert("path", ".graticule")
-                .datum(topojson.mesh(world, world.objects.countries, function (a, b) {
-                    return a !== b;
-                }))
-                .attr("class", "boundary")
-                .attr("d", path);
-    });
-
-    d3.select(self.frameElement).style("height", height + "px");
-
-    // -------------------------------------------------------------------------------------
-    // And now it is time for some for some magic ! ----------------------------------------
-    // -------------------------------------------------------------------------------------
-
-    //Map out all the gps points as red circles ------------------------------------------------------
-
-    function NewData() {
-
-        svg.selectAll("circles.points")
-                .data(gpsCoords)
-                .enter()
-                .append("circle")
-                .attr("r", function (d, i) {
-                    return 1;
-                })
-                .attr("transform", function (d) {
-                    return "translate(" + projection([d.x, d.y]) + ")";
-                })
-                .attr("opacity", function (d, i) {
-                    return 1;
-                })
-                .style("fill", "yellow");
-
-        // Enter the great archs of the world ! --------------------------------------------------------
-
-//        svg.selectAll(".arc")
-//                .data(links)
-//                .enter()
-//                .append("path")
-//                .attr({'class': 'arc'})
-//                .style({
-//                    fill: 'none',
-//                    'stroke-width': function (d, i) {
-//                        return lineWidthScale(dataSet[i].Dist);
-//                    },
-//                    'stroke': function (d, i) {
-//                        return getColorJet(colorScale(dataSet[i].Dist));
-//                    }
-//                })
-//                .attr({d: path});
-
-        var results = getResults(dataSet, getRawNodes(gpsCoords,projection));
-        var d3line = d3.svg.line()
-                .x(function(d){return d.x;})
-                .y(function(d){return d.y;})
-                .interpolate("linear");
-        //plot the data
-        for(var i = 0; i < results.length; i++){
-            svg.append("path").attr("d", d3line(results[i]))
-                    .style("stroke-width", 1)
-                    .style("stroke", function () {return getColorJet(colorScale(dataSet[i].Dist));})
-                    .style("fill", "none")
-                    .style('stroke-opacity',distScale(dataSet[i].Dist));
-        }
-    }
-
-    function ClearData() {
-        svg.selectAll("circle").data([]).exit().remove();
-        svg.selectAll(".arc").data([]).exit().remove();
-    }
-
-    NewData();
 </script>
 <body><input type="button" value="Data" onclick="NewData();"></body>
 <body><input type="button" value="Clear" onclick="ClearData();"></body>
