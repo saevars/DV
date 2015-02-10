@@ -28,8 +28,9 @@
 
 <script src="Iceland.js"></script>
 <script src="gps10.js"></script>
-<script src="gps20.js"></script>
+<script src="gps40.js"></script>
 <script src="gps.js"></script>
+<script src="D3/d3.geo.zoom.js"></script>
 
 <script>
 
@@ -43,9 +44,9 @@ function zoomHandler() {
   svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
 }
 
-
 var width = 1360,
     height = 768;
+
 var projection = d3.geo.equirectangular()
     .scale(240)
     .translate([width / 2, height / 2])
@@ -62,8 +63,6 @@ var svg = d3.select("body").append("svg")
     .attr("height", height)
         .attr("x", 0)
         .attr("y",0);
- //svg.append("rect").attr("width",width).attr("height",height);
-
 
 
 svg.append("path")
@@ -85,6 +84,7 @@ d3.json("world-50m.json", function(error, world) {
 
 d3.select(self.frameElement).style("height", height + "px");
 
+
 // -------------------------------------------------------------------------------------
 // And now it is time for some for some magic ! ----------------------------------------
 // -------------------------------------------------------------------------------------
@@ -94,7 +94,7 @@ d3.select(self.frameElement).style("height", height + "px");
 //Map out all the gps points as red circles ------------------------------------------------------
 
 
-    zoomListener(svg);
+   zoomListener(svg);
 
   //Clear shit of the map ! ----------------------------------------------------------------------
 
@@ -111,13 +111,13 @@ d3.select(self.frameElement).style("height", height + "px");
   function Data1(){
     ClearData();
     NewData2(dataSetI, gpsCoordsI);
-    zoomListener.translate([-850,-950]).scale(2);
-    zoomListener.event(svg.transition().duration(500));
+    zoomListener.translate([-569*25,-91*25]).scale(25);
+    zoomListener.event(svg.transition().duration(1000));
   }
 
   function Data2(){
     ClearData(); 
-    NewData2(dataSet20, gpsCoords20);
+    NewData2(dataSet40, gpsCoords40);
   }
 
   function Data3(){
@@ -132,10 +132,10 @@ d3.select(self.frameElement).style("height", height + "px");
 </script>
 <body>
     <p>
-        <input type="button" value="Data1" onclick="Data1();">
-        <input type="button" value="Data2" onclick="Data2();">
-        <input type="button" value="All Data" onclick="Data3();">
+        <input type="button" value="Icelandic Berries" onclick="Data1();">
+        <input type="button" value="40 Berries" onclick="Data2();">
+        <input type="button" value="273 Berries" onclick="Data3();">
          <input type="button" value="Cluster" onclick="Cluster()">
-        <input type="button" value="Clear" onclick="ClearData();">
+        <input type="button" value="Clear Map" onclick="ClearData();">
     </p>
 </body>
