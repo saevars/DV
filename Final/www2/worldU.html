@@ -18,14 +18,43 @@
   stroke-width: .5px;
 }
 
+#header {
+    background-color:black;
+    color:white;
+    text-align:center;
+    padding:5px;
+}
+
+#footer {
+    background-color:black;
+    color:white;
+    clear:both;
+    text-align:center;
+   padding:5px;    
+}
+
+
+#image {
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    padding:10px;
+    text-align:center;      
+}
+
 </style>
+
 <body>
+  <div id="header">
+      <h1>in4086 Data Visualization Assignment: </h1>
+  </div>
+  <div id="image">
+
 <script src="D3/d3.min.js"></script>
 <script src="http://d3js.org/topojson.v1.min.js"></script>
 <script type="text/javascript" src="d3-ForceEdgeBundling.js"></script>
 <script src="gpsData.js"></script>
 <script data-main="function" src="require.js"></script>
-
 <script src="Iceland.js"></script>
 <script src="gps40.js"></script>
 
@@ -56,13 +85,13 @@ var path = d3.geo.path()
 var graticule = d3.geo.graticule();
 
 
-var svg = d3.select("body").append("svg")
+var svg = d3.select("#image").append("svg")
     .attr("width", width)
     .attr("height", height)
         .attr("x", 0)
         .attr("y",0);
 
- svg.append("rect").attr("width",width).attr("height",height).attr("fill","gray");
+svg.append("rect").attr("width",width).attr("height",height).attr("fill","gray").attr("stroke", "gray").attr("stroke-width", "200");
 
 svg.append("path")
     .datum(graticule)
@@ -84,15 +113,6 @@ d3.json("world-50m.json", function(error, world) {
 d3.select(self.frameElement).style("height", height + "px");
 
 
-// -------------------------------------------------------------------------------------
-// And now it is time for some for some magic ! ----------------------------------------
-// -------------------------------------------------------------------------------------
-
-
- 
-//Map out all the gps points as red circles ------------------------------------------------------
-
-
    zoomListener(svg);
 
   //Clear shit of the map ! ----------------------------------------------------------------------
@@ -100,11 +120,6 @@ d3.select(self.frameElement).style("height", height + "px");
   function ClearData(){
     svg.selectAll("circle").data([]).exit().remove();
     svg.selectAll(".arc").data([]).exit().remove();
-    
-    svg.selectAll("path").selectAll("line").remove();
-   
-    
-
   }
 
   function Data1(){
@@ -129,7 +144,6 @@ d3.select(self.frameElement).style("height", height + "px");
     BigShit(dataSetB, gpsCoordsB);
   }
 </script>
-<body>
     <p>
         <input type="button" value="Icelandic Berries" onclick="Data1();">
         <input type="button" value="40 Berries" onclick="Data2();">
@@ -137,4 +151,8 @@ d3.select(self.frameElement).style("height", height + "px");
          <input type="button" value="Cluster" onclick="Cluster()">
         <input type="button" value="Clear Map" onclick="ClearData();">
     </p>
+  </div>
+  <div id="footer">
+    Saevar Steinn Hilmarsson & Tudor Voicu
+  </div>
 </body>
