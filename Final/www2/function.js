@@ -20,7 +20,7 @@ require(['clusterfck'],function() {
         return d.Dist;
     }), d3.max(dataSet, function(d){
         return d.Dist;
-    })]).range(["white", "red"]);
+    })]).range(["blue", "red"]);
 
     var lineWidthScale = d3.scale.pow().domain([0, d3.max(dataSet, function (d) {
         return d.Dist;
@@ -255,8 +255,8 @@ require(['clusterfck'],function() {
                 links.push({
                     type: "LineString",
                     coordinates: [
-                        projection([centroids[clusterDistanceMatrix[idx][0]][0], centroids[clusterDistanceMatrix[idx][0]][1]]),
-                        projection([centroids[clusterDistanceMatrix[idx][1]][0], centroids[clusterDistanceMatrix[idx][1]][1]])
+                        [centroids[clusterDistanceMatrix[idx][0]][0], centroids[clusterDistanceMatrix[idx][0]][1]],
+                        [centroids[clusterDistanceMatrix[idx][1]][0], centroids[clusterDistanceMatrix[idx][1]][1]]
                     ]
                 });
         }
@@ -269,8 +269,8 @@ require(['clusterfck'],function() {
                     fill: 'none',
                     'stroke-width': 2,
                     'stroke': function (d, i) {
-                        return "red"
-                        //return colorScale(clusterDistanceMatrix[i][2]);
+                        //return "red"
+                        return colorScale(clusterDistanceMatrix[i][2]);
                     }
                 })
                 .attr({d: path});
@@ -284,7 +284,7 @@ require(['clusterfck'],function() {
     groupData();
 
 // Calculate clusters.
-    var clusters = clusterfck.kmeans(coords3D,21);
+    var clusters = clusterfck.kmeans(coords3D,11);
     NewData(clusters);
 
     for(var i = 0; i < centroids.length; i++){
