@@ -1,0 +1,171 @@
+mbostock’s block #3757119 September 20, 2012
+Equirectangular (Plate Carrée)
+
+Open in a new window.
+The equirectangular projection is available as d3.geo.equirectangular. See also the rotating version.
+
+index.html#
+
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+.graticule {
+  fill: none;
+  stroke: #777;
+  stroke-width: .5px;
+  stroke-opacity: .5;
+}
+
+.land {
+  fill: #222;
+}
+
+.boundary {
+  fill: none;
+  stroke: #fff;
+  stroke-width: .5px;
+}
+
+</style>
+<body>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="http://d3js.org/topojson.v1.min.js"></script>
+<script>
+
+ var dataSet = [
+     {Cor1: [18.66667,57.33333], Cor2: [100.03333,25.66667] ,Dist: 0.001382},
+     {Cor1: [18.66667,57.33333], Cor2: [-121.9376,41.5696] ,Dist: 0.000706},
+     {Cor1: [18.66667,57.33333], Cor2: [-81.56667,42.56667] ,Dist: 0.000748},
+     {Cor1: [18.66667,57.33333], Cor2: [73.55,34.8] ,Dist: 0.000677},
+     {Cor1: [18.66667,57.33333], Cor2: [132.0664,43.2272] ,Dist: 0.000925},
+     {Cor1: [18.66667,57.33333], Cor2: [104.316666,35.46666] ,Dist: 0.001242},
+     {Cor1: [100.03333,25.66667], Cor2: [-121.9376,41.5696] ,Dist: 0.001344},
+     {Cor1: [100.03333,25.66667], Cor2: [-81.56667,42.56667] ,Dist: 0.001386},{Cor1: [100.03333,25.66667], Cor2: [73.55,34.8] ,Dist: 0.001315},{Cor1: [100.03333,25.66667], Cor2: [132.0664,43.2272] ,Dist: 0.001563},{Cor1: [100.03333,25.66667], Cor2: [104.316666,35.46666] ,Dist: 0.00188},{Cor1: [-121.9376,41.5696], Cor2: [-81.56667,42.56667] ,Dist: 0.000334},{Cor1: [-121.9376,41.5696], Cor2: [73.55,34.8] ,Dist: 0.000407},{Cor1: [-121.9376,41.5696], Cor2: [132.0664,43.2272] ,Dist: 0.000655},{Cor1: [-121.9376,41.5696], Cor2: [104.316666,35.46666] ,Dist: 0.000972},{Cor1: [-81.56667,42.56667], Cor2: [73.55,34.8] ,Dist: 0.000449},{Cor1: [-81.56667,42.56667], Cor2: [132.0664,43.2272] ,Dist: 0.000697},{Cor1: [-81.56667,42.56667], Cor2: [104.316666,35.46666] ,Dist: 0.001014},{Cor1: [73.55,34.8], Cor2: [132.0664,43.2272] ,Dist: 0.000334},{Cor1: [73.55,34.8], Cor2: [104.316666,35.46666] ,Dist: 0.000805},{Cor1: [132.0664,43.2272], Cor2: [104.316666,35.46666] ,Dist: 0.001053}];
+
+ var hubImportance = [0.00568, 0.00887, 0.004418, 0.004628, 0.003987, 0.005227, 0.006966];
+
+var width = 1600,
+    height = 900;
+
+var projection = d3.geo.equirectangular()
+    .scale(240)
+    .translate([width / 2, height / 2])
+    .precision(.1);
+
+var path = d3.geo.path()
+    .projection(projection);
+
+var graticule = d3.geo.graticule();
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height)
+        .attr("x", 0)
+        .attr("y",0)
+
+ svg.append("rect").attr("width",width).attr("height",height);
+
+var coords = [];
+var links  = [];
+
+svg.append("path")
+    .datum(graticule)
+    .attr("class", "graticule")
+    .attr("d", path);
+
+d3.json("world-50m.json", function(error, world) {
+  svg.insert("path", ".graticule")
+      .datum(topojson.feature(world, world.objects.land))
+      .attr("class", "land")
+      .attr("d", path);
+
+  svg.insert("path", ".graticule")
+      .datum(topojson.mesh(world, world.objects.countries, function(a, b) { return a !== b; }))
+      .attr("class", "boundary")
+      .attr("d", path);
+});
+
+d3.select(self.frameElement).style("height", height + "px");
+
+// -------------------------------------------------------------------------------------
+// And now it is time for some for some magic ! ----------------------------------------
+// -------------------------------------------------------------------------------------
+
+// Read data from CSV file
+d3.csv('dmShort.csv',function(error,data){ data.forEach(function(d){console.log(d);return d;})});
+d3.csv("gpsShort.csv",function(error, data) {
+
+	//Collect Lat and Long into an arrays coords
+	data.forEach(function(d){
+		if (d.Lat > 0 ){
+			coords.push([+d.Long,+d.Lat]);
+		}
+	});
+ 
+//Map out all the gps points as red circles
+d3.select(self.frameElement).style("height", height + "px");
+ svg.selectAll("circles.points")
+.data(data)
+.enter()
+.append("circle")
+.attr("r",function(d,i){
+             return hubImportance[i]*2000;
+         })
+.attr("transform", function(d) {return "translate(" + projection([d.Long,d.Lat]) + ")";})
+         .attr("opacity", function(d,i){
+             return hubImportance[i]*10000;
+         })
+         .style("fill", "red");
+
+ for(var i=0, len=dataSet.length; i<len; i++){
+    // (note: loop until length - 1 since we're getting the next
+    //  item with i+1)
+        console.log(dataSet[i].Cor1, dataSet[i].Cor2)
+        links.push({
+            type: "LineString",
+            coordinates: [
+                dataSet[i].Cor1, dataSet[i].Cor2
+            ]
+        });
+    }
+
+var pathArcs = svg.selectAll(".arc")
+    .data(links);
+
+    var colorScale=d3.scale.pow().domain([0, d3.max(dataSet, function(d){
+        return d.Dist;
+    })]).rangeRound([-255,255]);
+
+    var lineWidthScale=d3.scale.pow().domain([0, d3.max(dataSet, function(d){
+        return d.Dist;
+    })]).rangeRound([2,2]);
+
+    var getColorJet = function (number) {
+        if(number<0){
+            return "rgb("+(255+number)+","+(255+number)+",255)";
+        } else {
+            return "rgb(255,"+(255-number)+","+(255-number)+")";
+        }
+    }
+
+//enter
+pathArcs.enter()
+    .append("path").attr({
+        'class': 'arc'
+    }).style({ 
+        fill: 'none',
+        'stroke-width': function(d,i){return lineWidthScale(dataSet[i].Dist);},
+        //stroke : '#B10000'
+        stroke: function(d,i){return getColorJet(colorScale(dataSet[i].Dist));}
+    });
+
+//update
+pathArcs.attr({
+        //d is the points attribute for this path, we'll draw
+        //  an arc between the points using the arc function
+        d: path
+    })
+
+});
+</script>
