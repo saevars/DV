@@ -9,7 +9,7 @@
 }
 
 .land {
-  fill: #668D3C;
+  fill: #000000;
 }
 
 .boundary {
@@ -29,7 +29,7 @@
 <script src="Iceland.js"></script>
 <script src="gps10.js"></script>
 <script src="gps20.js"></script>
-<script src="gps.js"></script>
+<!--<script src="gps.js"></script>-->
 
 <script>
 
@@ -62,9 +62,8 @@ var svg = d3.select("body").append("svg")
     .attr("height", height)
         .attr("x", 0)
         .attr("y",0);
- //svg.append("rect").attr("width",width).attr("height",height);
 
-
+ svg.append("rect").attr("width",width).attr("height",height).attr("fill","gray");
 
 svg.append("path")
     .datum(graticule)
