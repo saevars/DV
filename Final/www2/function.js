@@ -284,7 +284,7 @@ require(['clusterfck'],function() {
     groupData();
 
 // Calculate clusters.
-    var clusters = clusterfck.kmeans(coords3D,11);
+    var clusters = clusterfck.kmeans(coords3D,7);
     NewData(clusters);
 
     for(var i = 0; i < centroids.length; i++){
