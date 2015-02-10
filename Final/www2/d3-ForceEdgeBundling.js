@@ -12,8 +12,8 @@ Author: Corneliu S. (github.com/upphiminn)
 			data_edges = [], 		// [{'source':'nodeid1', 'target':'nodeid2'},..]
 			compatibility_list_for_edge = [],
 			subdivision_points_for_edge = [],
-			K = 0.0001, 				// global bundling constant controling edge stiffness - initial 0.1
-			S_initial = 0.0001, 		// init. distance to move points
+			K = 0.01, 				// global bundling constant controling edge stiffness - initial 0.1
+			S_initial = 0.01, 		// init. distance to move points
 			P_initial = 1, 			// init. subdivision number
 			P_rate    = 2,			// subdivision rate increase
 			C = 6, 					// number of cycles to perform
