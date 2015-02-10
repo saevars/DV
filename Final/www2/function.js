@@ -1,3 +1,7 @@
+
+
+
+function BigShit(dataSet,gpsCoords){
 require(['clusterfck'],function() {
     var hubImportance = [0.00568, 0.00887, 0.004418, 0.004628, 0.003987, 0.005227, 0.006966];
 
@@ -21,6 +25,8 @@ require(['clusterfck'],function() {
     }), d3.max(dataSet, function(d){
         return d.Dist;
     })]).range(["blue", "red"]);
+
+
 
     var lineWidthScale = d3.scale.pow().domain([0, d3.max(dataSet, function (d) {
         return d.Dist;
@@ -82,7 +88,7 @@ require(['clusterfck'],function() {
         for (var i = 0; i < gpsCoords.length; i++)
             coords3D.push([gpsCoords[i].x, gpsCoords[i].y, 0]);
     }
-
+/*
     var width = 1600,
         height = 900;
 
@@ -123,7 +129,7 @@ require(['clusterfck'],function() {
             .attr("d", path);
     });
 
-    d3.select(self.frameElement).style("height", height + "px");
+    d3.select(self.frameElement).style("height", height + "px"); */
 
     // -------------------------------------------------------------------------------------
     // And now it is time for some for some magic ! ----------------------------------------
@@ -223,10 +229,7 @@ require(['clusterfck'],function() {
             }
         }
 
-        for(var idx = 0; idx < clusteredEdges.length; idx++) {
-
-            var results = getResults(clusteredEdges[idx], getRawNodes(gpsCoords, projection));
-            var d3line = d3.svg.line()
+        var d3line = d3.svg.line()
                 .x(function (d) {
                     return d.x;
                 })
@@ -234,6 +237,14 @@ require(['clusterfck'],function() {
                     return d.y;
                 })
                 .interpolate("linear");
+
+                var results = [];
+
+
+        for(var idx = 0; idx < clusteredEdges.length; idx++) {
+
+            results = results.concat(getResults(clusteredEdges[idx], getRawNodes(gpsCoords, projection)));
+
             //plot the data
             for (var i = 0; i < results.length; i++) {
                 svg.append("path").attr("d", d3line(results[i]))
@@ -242,6 +253,7 @@ require(['clusterfck'],function() {
                         return colorScale(dataSet[i].Dist);
                     })
                     .style("fill", "none")
+                    .style('vector-effect' , "non-scaling-stroke")
                     .style('stroke-opacity', distScale(dataSet[i].Dist));
             }
         }
@@ -268,6 +280,7 @@ require(['clusterfck'],function() {
                 .style({
                     fill: 'none',
                     'stroke-width': 2,
+                    'vector-effect' : "non-scaling-stroke",
                     'stroke': function (d, i) {
                         //return "red"
                         return colorScale(clusterDistanceMatrix[i][2]);
@@ -297,3 +310,78 @@ require(['clusterfck'],function() {
     console.log(clusters);
     console.log(centroids);
 });
+
+}
+
+
+//New stuff from the old www
+
+
+function NewData2(dataSet, gpsCoords){
+    var links  = {paths :[], dist : []};
+
+    for(var i=0, len=dataSet.length; i<len; i++){
+        // (note: loop until length - 1 since we're getting the next
+        //  item with i+1)
+        console.log(dataSet[i].Cor1, dataSet[i].Cor2)
+        links.dist.push(dataSet[i].Dist)
+        links.paths.push({
+            type: "LineString",
+            coordinates: [
+                [dataSet[i].Cor1.x, dataSet[i].Cor1.y], [dataSet[i].Cor2.x, dataSet[i].Cor2.y]
+            ]
+        });
+    }
+
+
+     maximal =  d3.max(dataSet, function(d){
+         return d.Dist;
+     });
+
+    // colorScale=d3.scale.pow().domain([0,maximal]).range(["white","blue"]);
+
+    
+
+    var colorScale = d3.scale.linear().domain([d3.min(dataSet, function(d){
+        return d.Dist;
+    }), d3.max(dataSet, function(d){
+        return d.Dist;
+    })]).range(["blue", "red"]);
+
+     lineWidthScale=d3.scale.pow().domain([0,maximal]).rangeRound([1,2]);
+   
+   svg.selectAll("circles.points")
+    .data(gpsCoords)
+    .enter()
+    .append("circle")
+    .attr("r", 1)
+    .attr("transform", function(d) {return "translate(" + projection([d.x,d.y]) + ")";})
+    .attr("opacity", 1)
+    .style({
+            fill : "red",
+            'vector-effect' : "non-scaling-stroke"
+        });
+
+
+  // Enter the great archs of the world ! --------------------------------------------------------
+
+
+   svg.selectAll(".arc")
+    .data(links.paths)
+    .enter()
+    .append("path")
+    .attr({'class': 'arc'})
+    .style({ 
+            fill: 'none',
+            'stroke-width': function(d,i){return lineWidthScale(links.dist[i]);},
+            'stroke-opacity': 0.5,
+            'vector-effect' : "non-scaling-stroke",
+            'stroke'      : function(d,i){return colorScale(+links.dist[i]);}
+          })
+    .attr({d: path});
+
+  }
+ function ClearData(){
+    svg.selectAll("circle").data([]).exit().remove();
+    svg.selectAll(".arc").data([]).exit().remove();
+  }

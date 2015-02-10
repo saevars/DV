@@ -1,4 +1,4 @@
-var gpsCoordsB = [{id: 1, x: -126.502778, y: 50.7875, name: "NoName"}, 
+var gpsCoords60 = [{id: 1, x: -126.502778, y: 50.7875, name: "NoName"}, 
 {id: 2, x: -126.502779, y: 50.787501, name: "NoName"}, 
 {id: 3, x: -125.075, y: 50.119444, name: "NoName"}, 
 {id: 4, x: -125.075001, y: 50.119445, name: "NoName"}, 
@@ -57,9 +57,9 @@ var gpsCoordsB = [{id: 1, x: -126.502778, y: 50.7875, name: "NoName"},
 {id: 77, x: 10.493202, y: 47.611794, name: "NoName"}, 
 {id: 78, x: 13.109319, y: 50.705148, name: "NoName"}, 
 {id: 79, x: 11.343787, y: 51.662847, name: "NoName"}, 
-{id: 80, x: 8.0369, y: 47.80331, name: "NoName"}, 
+{id: 80, x: 8.0369, y: 47.80331, name: "NoName"}
 ]; 
- var dataSetB= [{id: 0, Cor1: {id: 2, x: -126.502779, y: 50.787501, name: 'NoName'}, Cor2: {id: 1, x: -126.502778, y: 50.7875, name: 'NoName'}, Dist: 0.0015},
+ var dataSet60= [{id: 0, Cor1: {id: 2, x: -126.502779, y: 50.787501, name: 'NoName'}, Cor2: {id: 1, x: -126.502778, y: 50.7875, name: 'NoName'}, Dist: 0.0015},
 {id: 1, Cor1: {id: 3, x: -125.075, y: 50.119444, name: 'NoName'}, Cor2: {id: 1, x: -126.502778, y: 50.7875, name: 'NoName'}, Dist: 0.0021000000000000003},
 {id: 2, Cor1: {id: 3, x: -125.075, y: 50.119444, name: 'NoName'}, Cor2: {id: 2, x: -126.502779, y: 50.787501, name: 'NoName'}, Dist: 0.0036000000000000003},
 {id: 3, Cor1: {id: 4, x: -125.075001, y: 50.119445, name: 'NoName'}, Cor2: {id: 1, x: -126.502778, y: 50.7875, name: 'NoName'}, Dist: 0.0023},
@@ -1769,5 +1769,5 @@ var gpsCoordsB = [{id: 1, x: -126.502778, y: 50.7875, name: "NoName"},
 {id: 1707, Cor1: {id: 80, x: 8.0369, y: 47.80331, name: 'NoName'}, Cor2: {id: 76, x: 11.361754, y: 49.783954, name: 'NoName'}, Dist: 0.0027},
 {id: 1708, Cor1: {id: 80, x: 8.0369, y: 47.80331, name: 'NoName'}, Cor2: {id: 77, x: 10.493202, y: 47.611794, name: 'NoName'}, Dist: 0.003},
 {id: 1709, Cor1: {id: 80, x: 8.0369, y: 47.80331, name: 'NoName'}, Cor2: {id: 78, x: 13.109319, y: 50.705148, name: 'NoName'}, Dist: 0.0048000000000000004},
-{id: 1710, Cor1: {id: 80, x: 8.0369, y: 47.80331, name: 'NoName'}, Cor2: {id: 79, x: 11.343787, y: 51.662847, name: 'NoName'}, Dist: 0.0045000000000000005},
+{id: 1710, Cor1: {id: 80, x: 8.0369, y: 47.80331, name: 'NoName'}, Cor2: {id: 79, x: 11.343787, y: 51.662847, name: 'NoName'}, Dist: 0.0045000000000000005}
 ];
