@@ -18,17 +18,25 @@ function BigShit(dataSet, gpsCoords) {
             return d.Dist;
         })]).range([0.05, 0.1]);
 
-        var clusterDistScale = d3.scale.linear().domain([d3.min(dataSet, function (d) {
+        var clusterDistScale = d3.scale.pow().domain([d3.min(dataSet, function (d) {
             return d.Dist;
         }), d3.max(dataSet, function (d) {
             return d.Dist;
         })]).range([0.1, 1]);
 
-        var clusterColorScale = d3.scale.pow().domain([d3.min(dataSet, function (d) {
+        var clColorScale = d3.scale.pow().domain([d3.min(dataSet, function (d) {
             return d.Dist;
         }), d3.max(dataSet, function (d) {
             return d.Dist;
-        })]).range(["yellow", "red"]);
+        })]).rangeRound([-255, 255]);
+
+        var clusterColorScale = function(number){
+            if(number < 0){
+                return "rgb("+(255+number)+","+(255+number)+",255)";
+            } else {
+                return "rgb(255,"+(255-number)+","+(255-number)+")";
+            }
+        }
 
         var getRawNodes = function (nodes, projection) {
             var min_x = Number.MAX_VALUE;
@@ -229,7 +237,7 @@ function BigShit(dataSet, gpsCoords) {
                     'vector-effect': "non-scaling-stroke",
                     'stroke': function (d, i) {
                         //return "red"
-                        return clusterColorScale(clusterDistanceMatrix[i][2]);
+                        return clusterColorScale(clColorScale(clusterDistanceMatrix[i][2]));
                     }
                 })
                 .attr({d: path})
@@ -246,7 +254,7 @@ function BigShit(dataSet, gpsCoords) {
         groupData();
 
 // Calculate clusters.
-        var clusters = clusterfck.kmeans(coords3D, 7);
+        var clusters = clusterfck.kmeans(coords3D, 9);
         NewData(clusters);
 
         for (var i = 0; i < centroids.length; i++) {
